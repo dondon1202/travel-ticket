@@ -181,3 +181,11 @@ regionSearch.addEventListener("change", function (e) {
   card.innerHTML = str;
   searchResult_text.textContent = `本次搜尋共 ${newData.length} 筆資料`;
 });
+
+//新增功能 預設地區搜尋的時候，表單新增本次搜尋共 ?? 筆資料 會跟著變動
+btn.addEventListener("click", function (e) {
+  if (regionSearch.value === "地區搜尋") {
+    searchResult_text.textContent = `本次搜尋共 ${data.length} 筆資料`;
+    console.log(data);
+  }
+});
