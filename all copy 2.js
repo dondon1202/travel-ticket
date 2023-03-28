@@ -1,3 +1,5 @@
+let data = [];
+let newData = [];
 axios
   .get(
     "https://raw.githubusercontent.com/hexschool/js-training/main/travelAPI-lv1.json"
@@ -5,7 +7,7 @@ axios
   .then(function (response) {
     // handle success
     console.log(response.data);
-    let data = response.data;
+    data = response.data;
     let obj = {};
     //抓取data資料，組好HTML結構跟字串，然後初始化
     function init() {
@@ -50,6 +52,8 @@ axios
         str += content;
       });
       card.innerHTML = str;
+      transform(data);
+      transToC3();
     }
 
     init();
@@ -73,19 +77,10 @@ axios
       obj.rate = travelStar.value;
       obj.description = travelDescription.value;
       data.push(obj);
-
+      console.log("data", data);
       init();
 
       //清空輸入資料
-      //方法一
-      //   travelName.value = "";
-      //   travelImg.value = "";
-      //   travelArea.value = "";
-      //   travelPrice.value = "";
-      //   travelGroup.value = "";
-      //   travelStar.value = "";
-      //   travelDescription.value = "";
-      //方法二
       const addTicket_form = document.querySelector(".addTicket-form");
       addTicket_form.reset();
     });
@@ -138,13 +133,17 @@ axios
     </li>`;
         if (e.target.value == "") {
           str += content;
-          console.log(newData); // 在 if 語句中訪問 newData，此時 newData 為空陣列
+          // console.log(newData); // 在 if 語句中訪問 newData，此時 newData 為空陣列
           newData.push(item); // 將符合條件的元素添加到 newData 中
+          transform(data);
+          transToC3();
         }
         if (e.target.value == item.area) {
           str += content;
-          console.log(newData); // 在 if 語句中訪問 newData，此時 newData 為空陣列
+          // console.log(newData); // 在 if 語句中訪問 newData，此時 newData 為空陣列
           newData.push(item); // 將符合條件的元素添加到 newData 中
+          transform(newData);
+          transToC3();
         }
       });
       const card = document.querySelector(".ticketCard-area");
@@ -159,4 +158,53 @@ axios
         console.log(data);
       }
     });
+
+    function transform(data) {
+      let totalObj = {};
+      data.forEach(function (item, index) {
+        if (totalObj[item.area] == undefined) {
+          totalObj[item.area] = 1;
+        } else {
+          totalObj[item.area] += 1;
+        }
+      });
+      console.log(totalObj);
+
+      let area = Object.keys(totalObj);
+      let ary2 = [];
+      // area output ["高雄","台北","台中"]
+      area.forEach(function (item, index) {
+        let ary = [];
+
+        ary.push(item);
+        ary.push(totalObj[item]);
+        ary2.push(ary);
+      });
+      newData = ary2;
+      console.log(newData);
+    }
+
+    function transToC3() {
+      var chart = c3.generate({
+        bindto: "#chart",
+        donut: {
+          title: "套票地區比重",
+          width: 15,
+          style: {
+            "font-size": "40px",
+          },
+        },
+
+        data: {
+          columns: newData,
+          type: "donut",
+
+          colors: {
+            台北: "#26C0C7",
+            台中: "#5151D3",
+            高雄: "#E68618",
+          },
+        },
+      });
+    }
   });

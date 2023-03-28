@@ -1,0 +1,37 @@
+.between {
+  justify-content: space-between;
+}
+.box {
+  display: flex;
+  align-items: center;
+  width: 500px;
+  align-self: start;
+  flex-wrap: wrap;
+}
+.items-start {
+  align-items: start;
+}
+.c3-chart-arcs-title {
+  font-style: 16px;
+}
+#chart .c3-chart-arc text {
+  display: none;
+}
+#chart {
+  width: 200px;
+  margin-top: -50px;
+  font-size: 50px;
+}
+
+@media (max-width: 768px) {
+  .box {
+    justify-content: center;
+    margin: 0 auto;
+  }
+  #chart {
+    margin: 0 auto;
+  }
+  #searchResult-text {
+    margin-top: 20px;
+  }
+}
